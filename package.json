@@ -1,0 +1,17 @@
+{
+  "name":    "beamitover",
+  "version": "0.0.1",
+
+  "description": "Facebook app using Torque to easily share files",
+
+  "dependencies": {
+    "async":     "0.1.18",
+    "ejs":       "0.4.3",
+    "express":   "2.4.6",
+    "faceplate": "0.0.4"
+  },
+
+  "engines": {
+    "node": "0.6.x"
+  }
+}

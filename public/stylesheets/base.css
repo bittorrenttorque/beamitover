@@ -1,0 +1,152 @@
+html {
+    overflow-y: auto !important;
+}
+
+.fb-progress {
+    height: 3px;
+    background-color: white;
+    width: 100%;
+}
+.fb-bar {
+    height: 5px;
+    background-color: #627AAD;
+}
+
+.modal-backdrop.fade.in {
+    opacity: 0.9;
+    background-color: rgb(252, 252, 252);
+}
+.modal-body > .file {
+    width: 100%;
+    height: 16px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+
+.user > .profile {
+    height: 27px;
+    line-height: 27px;
+}
+.user > .profile > .name {
+    float: left;
+    padding-left: 10px;
+}
+.user > .profile > img {
+    height: 27px;
+    float: left;
+}
+.user > .profile > .btn {
+    float: right;
+}
+.user.well {
+    background-color: #fff;
+}
+
+i.status {
+}
+i.status.online {
+    background-image: url(http://static.ak.fbcdn.net/rsrc.php/v2/yV/x/QlrR_y6HLs5.png);
+    background-position: -845px -9px;
+    background-repeat: no-repeat;
+    background-size: auto;
+    margin-top:7px;
+    margin-left:7px;
+    width: 10px;
+    height: 27px;
+    float: right;
+}
+i.status.connecting {
+    background-image: url(http://static.ak.fbcdn.net/rsrc.php/v2/yb/r/GsNJNwuI-UM.gif);
+    width: 16px;
+    height: 11px;
+    float: right;
+    margin-top: 9px;
+    margin-left: 7px;
+}
+i.status.offline {
+    background-image: url(http://static.ak.fbcdn.net/rsrc.php/v2/y-/x/42NpRHYIj_U.png);
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-position: -162px -135px;
+    float: right;
+    height: 8px;
+    width: 8px;
+    margin-top: 10px;
+    margin-left: 7px;
+}
+i.status.error {
+    background-image: url(http://static.ak.fbcdn.net/rsrc.php/v2/yV/x/QlrR_y6HLs5.png);
+    background-position: -809px -55px;
+    background-repeat: no-repeat;
+    background-size: auto;
+    margin-top: 8px;
+    margin-left: 7px;
+    width: 11px;
+    height: 11px;
+    float: right;
+}
+
+
+.file > .name {
+    float: left;
+}
+.file > .size {
+    float: right;
+}
+
+.bundle.well {
+    background: #ccc;
+}
+
+.torrent-info {
+    line-height: 27px;
+    height: 27px;
+    padding: 0px 0px 10px 0px;
+}
+.torrent-info > .name {
+    float: left;
+}
+.torrent-info > .btn-group {
+    float: right;
+}
+
+.bundle.well.row {
+    margin-top: 10px !important;
+    padding: 0px;
+}
+
+.bundle.well.row .torrent-info {
+    padding: 10px 10px 10px 19px;
+    background-color: #f2f2f2;
+}
+.bundle.well.row .files {
+    padding: 10px 10px 10px 19px;
+    background-color: #ddd;
+}
+
+.bundle.row, .file.row, .torrent-info.row, .profile.row {
+    margin: 0px !important;
+}
+
+.bundle .btn {
+    padding: 4px;
+}
+.bundle .remove {
+    background-position: -312px 0;
+}
+.bundle .open {
+    background-position: -408px -120px;
+}
+.bundle .share {
+    background-position: -336px -96px;
+}
+.bundle .btn > div {
+    background-image: url(http://twitter.github.com/bootstrap/assets/img/glyphicons-halflings.png);
+    width: 14px;
+    height: 14px;
+    margin-top: 1px;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-repeat: no-repeat;
+}

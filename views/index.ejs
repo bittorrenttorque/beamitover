@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:fb="http://ogp.me/ns/fb#" lang="en">
+  <head>
+    <!-- redirect if we are not logged in -->
+    <% if (!user) { %>
+      <script>
+        var redirect_url = 'http://apps.facebook.com/284782631624773/';
+        self.parent.location = 'http://www.facebook.com/dialog/oauth/' + 
+          '?client_id=284782631624773&redirect_uri=' + redirect_url;
+      </script>
+    <% } %>
+
+    <meta charset="utf-8" />
+    <title><%= app.name %></title>
+    <link rel="stylesheet" href="/components/fbootstrapp/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="/stylesheets/base.css" type="text/css" />
+
+
+    <!--[if IEMobile]>
+    <link rel="stylesheet" href="mobile.css" media="screen" type="text/css"  />
+    <![endif]-->
+
+    <!-- These are Open Graph tags.  They add meta data to your  -->
+    <!-- site that facebook uses when your content is shared     -->
+    <!-- over facebook.  You should fill these tags in with      -->
+    <!-- your data.  To learn more about Open Graph, visit       -->
+    <!-- 'https://developers.facebook.com/docs/opengraph/'       -->
+    <meta property="og:title" content="<%= app.name %>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="<%= url() %>" />
+    <meta property="og:image" content="<%= url('/logo.png') %>" />
+    <meta property="og:site_name" content="<%= app.name %>" />
+    <meta property="og:description" content="My first app" />
+    <meta property="fb:app_id" content="<%= app.id %>" />
+  </head>
+  <body>
+    <div id="fb-root"></div>
+    <script type="text/javascript">
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '<%= app.id %>', // App ID
+          channelUrl : '<%= url_no_scheme('/channel.html') %>', // Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true // parse XFBML
+        });
+
+        // Listen to the auth.login which will be called when the user logs in
+        // using the Login button
+        FB.Event.subscribe('auth.login', function(response) {
+          // We want to reload the page now so PHP can read the cookie that the
+          // Javascript SDK sat. But we don't want to use
+          // window.location.reload() because if this is in a canvas there was a
+          // post made to this page and a reload will trigger a message to the
+          // user asking if they want to send data again.
+          window.location = window.location;
+        });
+
+        FB.Canvas.setAutoGrow();
+      };
+
+      // Load the SDK Asynchronously
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    <div class="container canvas">
+      <div class="hero-unit">
+        <header class="clearfix">
+          <% if (user) { %>
+          <p id="picture" style="background-image: url(https://graph.facebook.com/<%= user.id %>/picture?type=normal)"></p>
+
+          <div>
+            <h1><%= app.name %></h1>
+            <p class="tagline">
+              File sharing with friends made easy.
+            </p>
+            <br>
+            <a href="#" class="btn apprequests" id="sendRequest" data-message="Share files with me using <%= app.name %>.">
+              <span class="apprequests">Share with more friends!</span>
+            </a>
+          </div>
+          <% } %>
+        </header>
+      </div>
+
+      <script type="text/template" id="bundle_template">
+        <div class="torrent-info row">
+          <div class="name"><strong><@= name @></strong></div>
+          <div class="btn-group">
+            <button type="button" class="btn"><div class="share"></div></button>
+            <button type="button" class="btn"><div class="open"></div></button>
+            <button type="button" class="btn"><div class="remove"></div></button>
+          </div>
+        </div>
+        <div class="fb-progress">
+          <div class="fb-bar" style="width: <@= progress @>;">
+          </div>
+        </div>          
+        <div class="files"></div>
+      </script>
+
+      <script type="text/template" id="file_template">
+        <div class="name"><@= name @></div>
+        <div class="size"><@= size @></div>
+      </script>
+
+      <script type="text/template" id="self_template">
+        <div class="user well self">
+          <div class="profile row">
+            <img src="https://graph.facebook.com/<@= id @>/picture?type=square" alt="<@= name @>" />
+            <div class="name">Your bundles<i class="status <@= status @>"></i></div>
+            <a href="#" class="primary btn fileshare" id="fileShare">
+              <div class="fileshare">Share New Files</div>
+            </a>
+          </div>
+          <div class="bundles"></div>
+        </div>
+      </script>
+
+      <script type="text/template" id="friend_template">
+        <div class="user well friend">
+          <div class="profile row">
+            <img src="https://graph.facebook.com/<@= id @>/picture?type=square" alt="<@= name @>" />
+            <div class="name"><@= first_name @> bundles<i class="status <@= status @>"></i></div>
+          </div>
+          <div class="bundles"></div>
+        </div>
+      </script>
+
+      <script type="text/template" id="bundling_template">
+        <div class="modal-header">
+          <h3 class="status">Warming up...</h3>
+        </div>
+        <div class="modal-body">
+          <@ for(var i=0; i<files.length; i++) { @>
+            <div class="file">
+              <div class="name"><@= files[i].name @></div>
+              <div class="size"><@= files[i].size @></div>
+            </div>
+          <@ } @>
+        </div>
+        <div class="fb-progress">
+          <div class="fb-bar" style="width: 0%;">
+          </div>
+        </div>          
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="tell btn primary disabled" data-url="<%= url() %>">Tell friends</a>
+        </div>
+      </script>
+
+
+      <section id="users" class="clearfix">
+      </section>
+
+    </div>
+    <script type="text/javascript" src="/components/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/components/underscore/underscore.js"></script>
+    <script type="text/javascript" src="/components/jStorage/jstorage.js"></script>
+    <script type="text/javascript" src="/components/backbone/backbone.js"></script>
+    <script type="text/javascript" src="/components/btapp/btapp.min.js"></script>
+    <script type="text/javascript" src="/components/backbrace/backbrace.js"></script>
+    <script type="text/javascript" src="/scripts/index.js"></script>
+    <script type="text/javascript" src="/components/fbootstrapp/js/bootstrap-modal.js"></script>
+ 
+    <script>
+      <% if (user) { %>
+        jQuery(function() {
+          var self = new beamitover.Self({
+            id: <%= user.id %>,
+            name: "<%= user.name %>",
+            credentials: {
+              username: "<%= user.id %>",
+              password: "<%= user.id %>"
+            }
+          });
+          var selfView = new beamitover.SelfView({
+            model: self,
+            templateid: '#self_template',
+          });
+          $('#users').append(selfView.render().el);
+        });
+        <% req.friends_using_app.forEach(function(friend) { %>
+          jQuery(function() {
+            var friend = new beamitover.Friend({
+              id: <%= friend.uid %>,
+              name: "<%= friend.name %>",
+              first_name: "<%= friend.first_name %>",
+              credentials: {
+                username: "<%= friend.uid %>",
+                password: "<%= friend.uid %>"
+              }
+            });
+            var friendView = new beamitover.FriendView({
+              model: friend,
+              templateid: '#friend_template'
+            });
+            $('#users').append(friendView.render().el);
+          });
+        <% }); %>
+
+      <% } %>
+    </script>
+
+  </body>
+</html>
+
