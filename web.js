@@ -1,7 +1,16 @@
 var async   = require('async');
 var express = require('express');
 var util    = require('util');
+var _ = require('underscore');
 
+if(_.isUndefined(process.env.FACEBOOK_APP_ID)) {
+  console.log('invalid facebook app id -> ', process.env.FACEBOOK_APP_ID);
+  process.exit(1);
+}
+if(_.isUndefined(process.env.FACEBOOK_SECRET)) {
+  console.log('invalid facebook app secret -> ', process.env.FACEBOOK_SECRET);
+  process.exit(1);
+}
 
 // create an express webserver
 var app = express.createServer(
