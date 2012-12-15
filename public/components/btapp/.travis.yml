@@ -1,0 +1,7 @@
+before_script:
+    - bower install
+language: node_js
+node_js:
+    - 0.8
+notifications:
+    irc: irc.freenode.org#btapp

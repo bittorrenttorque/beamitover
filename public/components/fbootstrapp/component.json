@@ -1,0 +1,8 @@
+{
+  "name": "fbootstrapp",
+  "version": "1.5.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bittorrenttorque/fbootstrapp.git"
+  }
+}

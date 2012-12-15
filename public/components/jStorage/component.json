@@ -1,0 +1,19 @@
+{
+  "name": "jStorage",
+  "version": "0.3.1",
+  "main": "./jstorage.js",
+  "author": {
+    "name": "Andris Reinman",
+    "email": "andris.reinman@gmail.com"
+  },
+  "dependencies": {},
+  "gitHead": "2bb8413b33be3b8b6324bd3c1680d4f9f8380c6a",
+  "readme": "# jStorage\n\n**jStorage** is a cross-browser key-value store database to store data locally in the browser - jStorage supports all major browsers, both in **desktop** (yes - even Internet Explorer 6) and in **mobile**.\n\nAdditionally jStorage is library agnostic, it works well with any other JavaScript library on the same webpage, be it jQuery, Prototype, MooTools or something else. Though you still need to have either a third party library (Prototype, MooTools) or [JSON2](https://github.com/douglascrockford/JSON-js/blob/master/json2.js) on the page to support older IE versions.\n\njStorage supports storing Strings, Numbers, JavaScript objects, Arrays and even native XML nodes which kind of makes it a JSON storage. jStorage also supports setting TTL values for auto expiring stored keys and - best of all - notifying other tabs/windows when a key has been changed, which makes jStorage also a local PubSub platform for web applications.\n\njStorage is pretty small, about 10kB when minified, 4kB gzipped.\n\nIf jStorage is loaded on the page localStorage and sessionStorage polyfills are added to IE6 and IE7 in addition to regular $.jStorage methods. \nYou can use regular setItem/getItem\nmethods with the polyfills but getter/setters can be used as well:\n\n    localStorage.mykey = myval;\n\nis absolutely valid with jStorage. The only downside is that you can't use *onstorage* event, you need to fall back to *listenKeyChange* instead.\n\n## Donate\n\nSupport jStorage development\n\n[![Donate to author](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DB26KWR2BQX5W)\n\n## Features\n\njStorage supports the following features:\n\n  * store and retrieve data from browser storage using any JSON compatible data format (+ native XML nodes)\n  * set TTL values to stored keys for auto expiring\n  * publish and subscribe to cross-window/tab events\n  * listen for key changes (update, delete) from the current or any other browser window\n  * use any browser since IE6, both in desktop and in mobile\n\n## Browser support\n\nCurrent availability: jStorage supports all major browsers - Internet Explorer 6+, Firefox 2+, \nSafari 4+, Chrome 4+, Opera 10.50+\n\nIf the browser doesn't support data caching, then no exceptions are raised - jStorage can still \nbe used by the script but nothing is actually stored.\n\n## Tests\n\nSee [tests/testrunner.html](http://www.jstorage.info/static/tests/testrunner.html) for unit tests\n\n**NB!** - listenKeyChange and publish/subscribe tests tend to fail sometimes in Internet Explorer, which should be ok.\n\n## Docs\n\nProject homepage and docs: [www.jstorage.info](http://www.jstorage.info)\n\n## License\n\n**MIT**",
+  "readmeFilename": "README.md",
+  "_id": "jStorage@0.3.0",
+  "description": "**jStorage** is a cross-browser key-value store database to store data locally in the browser - jStorage supports all major browsers, both in **desktop** (yes - even Internet Explorer 6) and in **mobile**.",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/andris9/jStorage"
+  }
+}
