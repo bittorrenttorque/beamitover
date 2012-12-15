@@ -68,7 +68,16 @@ jQuery(function() {
             this.set({
                 btapp: btapp
             });
+            btapp.on('client:error', this.reconnect, this);
             this.trackStatus();
+        },
+        reconnect: function() {
+            setTimeout(_.bind(function() {
+                this.set('status', 'connecting');
+                setTimeout(_.bind(function() {
+                    this.get('btapp').connect(this.get('credentials'));
+                }, this), 1000);
+            }, this), 15000);
         }
     });
 
