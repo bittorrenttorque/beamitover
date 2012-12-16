@@ -39,6 +39,25 @@ function sendFB(description) {
     return ret;
 }
 
+function inviteFB(message) {
+    var ret = new jQuery.Deferred();
+    FB.ui(
+        {
+            method  : 'apprequests',
+            message : message
+        },
+        function (response) {
+        // If response is null the user canceled the dialog
+            if (response != null) {
+                ret.resolve();
+            } else {
+                ret.reject();
+            }
+        }
+    );
+    return ret;
+}
+
 jQuery(function() {
     //we're using server side templating in ejs, which uses erb templating as well,
     //so we need to change underscore's syntax so we can have client templates within
@@ -171,7 +190,11 @@ jQuery(function() {
     });
 
     /**
-     *  Is responsible for providing the UI for a torrent on a friends machine
+     *  FriendBundleView
+     *  
+     *  This view is responsible for providing the UI for a torrent on a friends machine
+     *  It should enable you to download the torrent they have onto your own machine,
+     *  as well as reflect the state change when you begin downloading it
     **/
     var FriendBundleView = BundleView.extend({
         templateId: '#friend_bundle_template',
@@ -495,18 +518,7 @@ jQuery(function() {
 
     $(function(){
         $('#sendRequest').click(function() {
-            FB.ui(
-                {
-                    method  : 'apprequests',
-                    message : $(this).attr('data-message')
-                },
-                function (response) {
-                // If response is null the user canceled the dialog
-                    if (response != null) {
-                        log(response);
-                    }
-                }
-            );
+            inviteFB($(this).attr('data-message'));
         });
     });
 
