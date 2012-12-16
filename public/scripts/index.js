@@ -23,7 +23,7 @@ function sendFB(description) {
     FB.ui(
         {
             method      : 'send',
-            link        : 'http://apps.facebook.com/beamitover',
+            link        : $("meta[property=og:url]").attr("content"),
             description : description
         },
         function (response) {
