@@ -4,9 +4,9 @@
     <!-- redirect if we are not logged in -->
     <% if (!user) { %>
       <script>
-        var redirect_url = 'http://apps.facebook.com/284782631624773/';
+        var redirect_url = 'http://apps.facebook.com/<%= app.id %>/';
         self.parent.location = 'http://www.facebook.com/dialog/oauth/' + 
-          '?client_id=284782631624773&redirect_uri=' + redirect_url;
+          '?client_id=<%= app.id %>&redirect_uri=' + redirect_url;
       </script>
     <% } %>
 
@@ -30,7 +30,7 @@
     <meta property="og:url" content="<%= url() %>" />
     <meta property="og:image" content="<%= url('/logo.png') %>" />
     <meta property="og:site_name" content="<%= app.name %>" />
-    <meta property="og:description" content="My first app" />
+    <meta property="og:description" content="BeamItOver allows you to easily share files with your friends." />
     <meta property="fb:app_id" content="<%= app.id %>" />
   </head>
   <body>
@@ -89,7 +89,17 @@
         </header>
       </div>
 
-      <script type="text/template" id="bundle_template">
+      <script type="text/template" id="friend_bundle_template">
+        <div class="torrent-info row">
+          <div class="name"><strong><@= name @></strong></div>
+          <div class="btn-group">
+            <button type="button" class="btn"><div class="download"></div></button>
+          </div>
+        </div>
+        <div class="files"></div>
+      </script>
+
+      <script type="text/template" id="self_bundle_template">
         <div class="torrent-info row">
           <div class="name"><strong><@= name @></strong></div>
           <div class="btn-group">
@@ -101,7 +111,7 @@
         <div class="fb-progress">
           <div class="fb-bar" style="width: <@= progress @>;">
           </div>
-        </div>          
+        </div>
         <div class="files"></div>
       </script>
 
@@ -114,7 +124,8 @@
         <div class="user well self">
           <div class="profile row">
             <img src="https://graph.facebook.com/<@= id @>/picture?type=square" alt="<@= name @>" />
-            <div class="name">Your bundles<i class="status <@= status @>"></i></div>
+            <div class="name">Your bundles</div>
+            <i class="status <@= status @>"></i>
             <a href="#" class="primary btn fileshare" id="fileShare">
               <div class="fileshare">Share New Files</div>
             </a>
@@ -127,7 +138,8 @@
         <div class="user well friend">
           <div class="profile row">
             <img src="https://graph.facebook.com/<@= id @>/picture?type=square" alt="<@= name @>" />
-            <div class="name"><@= first_name @> bundles<i class="status <@= status @>"></i></div>
+            <div class="name"><@= name @></div>
+            <i class="status <@= status @>"></i>
           </div>
           <div class="bundles"></div>
         </div>
@@ -185,9 +197,7 @@
             templateid: '#self_template',
           });
           $('#users').append(selfView.render().el);
-        });
         <% req.friends_using_app.forEach(function(friend) { %>
-          jQuery(function() {
             var friend = new beamitover.Friend({
               id: <%= friend.uid %>,
               name: "<%= friend.name %>",
@@ -195,16 +205,16 @@
               credentials: {
                 username: "<%= friend.uid %>",
                 password: "<%= friend.uid %>"
-              }
+              },
+              local: self.get('btapp')
             });
             var friendView = new beamitover.FriendView({
               model: friend,
               templateid: '#friend_template'
             });
             $('#users').append(friendView.render().el);
-          });
         <% }); %>
-
+        });
       <% } %>
     </script>
 

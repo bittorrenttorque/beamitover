@@ -1,6 +1,12 @@
 html {
     overflow-y: auto !important;
 }
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Corben', Georgia, Times, serif;
+}
+.user.well, .hero-unit {
+    border: 1px solid rgba(0, 0, 0, 0.25) !important;
+}
 
 .fb-progress {
     height: 3px;
@@ -54,13 +60,13 @@ i.status.online {
     margin-left:7px;
     width: 10px;
     height: 27px;
-    float: right;
+    float: left;
 }
 i.status.connecting {
     background-image: url(http://static.ak.fbcdn.net/rsrc.php/v2/yb/r/GsNJNwuI-UM.gif);
     width: 16px;
     height: 11px;
-    float: right;
+    float: left;
     margin-top: 9px;
     margin-left: 7px;
 }
@@ -69,7 +75,7 @@ i.status.offline {
     background-repeat: no-repeat;
     background-size: auto;
     background-position: -162px -135px;
-    float: right;
+    float: left;
     height: 8px;
     width: 8px;
     margin-top: 10px;
@@ -84,7 +90,7 @@ i.status.error {
     margin-left: 7px;
     width: 11px;
     height: 11px;
-    float: right;
+    float: left;
 }
 
 
@@ -140,6 +146,9 @@ i.status.error {
 }
 .bundle .share {
     background-position: -336px -96px;
+}
+.bundle .download {
+    background-position: -96px -24px;
 }
 .bundle .btn > div {
     background-image: url(http://twitter.github.com/bootstrap/assets/img/glyphicons-halflings.png);
