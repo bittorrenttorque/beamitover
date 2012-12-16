@@ -94,7 +94,7 @@
         <div class="torrent-info row">
           <div class="name"><strong><@= name @></strong></div>
           <div class="btn-group">
-            <button type="button" class="btn"><div class="download"></div></button>
+            <button type="button" class="btn <@ if(disabled) { @>disabled<@ } @>"><div class="<@ if(download) { @>download<@ } else if(ok) { @>ok<@ } @>"></div></button>
           </div>
         </div>
         <div class="files"></div>

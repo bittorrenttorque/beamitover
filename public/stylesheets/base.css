@@ -138,6 +138,9 @@ i.status.error {
 .bundle .btn {
     padding: 4px;
 }
+.bundle .ok {
+    background-position: -288px 0;
+}
 .bundle .remove {
     background-position: -312px 0;
 }

@@ -146,6 +146,9 @@ jQuery(function() {
         }
     });
 
+    /**
+     *  Is responsible for providing the UI for a torrent on a friends machine
+    **/
     var FriendBundleView = BundleView.extend({
         templateId: '#friend_bundle_template',
         events: {
@@ -153,20 +156,45 @@ jQuery(function() {
         },
         initialize: function() {
             BundleView.prototype.initialize.apply(this, arguments);
+            this.options.local.live('torrent ' + this.model.id, this.checkLocalExists, this);
         },
+        // We just added the torrent that is listed...disabled the download button
+        localAdded: function(torrent) {
+            torrent.on('destroy', this.localRemoved, this);
+            this.$('.btn').addClass('disabled');
+            this.$('.btn > div').removeClass('download').addClass('ok');
+        },
+        // We just deleted the torrent from the local machine...enabled downloading it again
+        localRemoved: function() {
+            this.$('.btn').removeClass('disabled');
+            this.$('.btn > div').addClass('download').removeClass('ok');
+        },
+        // Handles the case where the local machine now has the torrent listed in a friends list,
+        // and visa versa...should be a disabled check when we already have it, otherwise a dl btn
+        checkLocalExists: function() {
+            var torrent = this.options.local.get('torrent').get(this.model.id);
+            if(!!torrent) {
+                this.localAdded(torrent);
+            } else {
+                this.localRemoved();
+            }
+        },
+        // Handles clicks to the download button
         onDownload: function() {
-            var req = this.options.local.get('torrent').download({
-                url: this.model.get('properties').get('uri')
-            });
-            req.then(function(res) {
-                log('download success', res);
-            }, function(res) {
-                log('download failure', res);
-            });
+            // Make sure we only handle events from the button when its not disabled
+            if(!this.$('.btn').hasClass('disabled')) {
+                this.options.local.get('torrent').download({
+                    url: this.model.get('properties').get('uri')
+                });
+            }
         },
         render: function() {
+            var disabled = !_.isUndefined(this.options.local.get('torrent').get(this.model.id));
             this.$el.html(this.template({
-                name: this.model.get('properties').get('name')
+                name: this.model.get('properties').get('name'),
+                disabled: disabled,
+                ok: disabled,
+                download: !disabled
             }));
             this.assign(this.files, '.files');
             return this;
