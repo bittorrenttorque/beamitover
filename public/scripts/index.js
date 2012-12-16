@@ -23,7 +23,7 @@ function sendFB(description) {
     FB.ui(
         {
             method      : 'send',
-            link        : $("meta[property=og:url]").attr("content"),
+            link        : 'http://apps.facebook.com/' + $("meta[property='og:namespace']").attr("content"),
             description : description
         },
         function (response) {
