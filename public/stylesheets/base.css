@@ -1,9 +1,7 @@
 html {
     overflow-y: auto !important;
 }
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Corben', Georgia, Times, serif;
-}
+
 .user.well, .hero-unit {
     border: 1px solid rgba(0, 0, 0, 0.25) !important;
 }
@@ -52,7 +50,7 @@ h1, h2, h3, h4, h5, h6 {
 i.status {
 }
 i.status.online {
-    background-image: url(http://static.ak.fbcdn.net/rsrc.php/v2/yV/x/QlrR_y6HLs5.png);
+    background-image: url(/images/QlrR_y6HLs5.png);
     background-position: -845px -9px;
     background-repeat: no-repeat;
     background-size: auto;
@@ -63,7 +61,7 @@ i.status.online {
     float: left;
 }
 i.status.connecting {
-    background-image: url(http://static.ak.fbcdn.net/rsrc.php/v2/yb/r/GsNJNwuI-UM.gif);
+    background-image: url(/images/GsNJNwuI-UM.gif);
     width: 16px;
     height: 11px;
     float: left;
@@ -71,7 +69,7 @@ i.status.connecting {
     margin-left: 7px;
 }
 i.status.offline {
-    background-image: url(http://static.ak.fbcdn.net/rsrc.php/v2/y-/x/42NpRHYIj_U.png);
+    background-image: url(/images/42NpRHYIj_U.png);
     background-repeat: no-repeat;
     background-size: auto;
     background-position: -162px -135px;
@@ -82,7 +80,7 @@ i.status.offline {
     margin-left: 7px;
 }
 i.status.error {
-    background-image: url(http://static.ak.fbcdn.net/rsrc.php/v2/yV/x/QlrR_y6HLs5.png);
+    background-image: url(/images/QlrR_y6HLs5.png);
     background-position: -809px -55px;
     background-repeat: no-repeat;
     background-size: auto;
@@ -154,7 +152,7 @@ i.status.error {
     background-position: -96px -24px;
 }
 .bundle .btn > div {
-    background-image: url(http://twitter.github.com/bootstrap/assets/img/glyphicons-halflings.png);
+    background-image: url(/images/glyphicons-halflings.png);
     width: 14px;
     height: 14px;
     margin-top: 1px;

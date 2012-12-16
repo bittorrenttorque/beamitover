@@ -20,6 +20,7 @@ function isDirectory(path) {
 }
 
 function sendFB(description) {
+    var ret = new jQuery.Deferred();
     FB.ui(
         {
             method      : 'send',
@@ -29,10 +30,13 @@ function sendFB(description) {
         function (response) {
         // If response is null the user canceled the dialog
             if (response != null) {
-                log(response);
+                ret.resolve();
+            } else {
+                ret.reject();
             }
         }
     );
+    return ret;
 }
 
 jQuery(function() {
@@ -117,10 +121,30 @@ jQuery(function() {
             this.model.get('properties').on('change:progress', this.onProgress, this);
         },
         onShare: function() {
-            sendFB('Sharing a ' + this.model.get('file').length + ' file bundle: ' + this.model.get('properties').get('name'));
+            if(this.$('.share').parent().hasClass('disabled')) {
+                return;
+            }
+
+            this.$('.share').parent().addClass('disabled');
+            var length = this.model.get('file').length;
+            var name = this.model.get('properties').get('name');
+            var msg = 'Sharing a ' + length + ' file bundle: ' + name;
+            var req = sendFB(msg);
+            var reEnable = _.bind(function() {
+                this.$('.share').parent().removeClass('disabled');
+            }, this);
+            req.then(reEnable, reEnable);
         },
         onOpen: function() {
+            if(this.$('.open').parent().hasClass('disabled')) {
+                return;
+            }
+            this.$('.open').parent().addClass('disabled');
+            var reEnable = _.bind(function() {
+                this.$('.open').parent().removeClass('disabled');
+            }, this);
             this.model.open_containing();
+            setTimeout(reEnable, 2000);
         },
         onRemove: function() {
             this.$el.hide();
@@ -186,6 +210,7 @@ jQuery(function() {
                 this.options.local.get('torrent').download({
                     url: this.model.get('properties').get('uri')
                 });
+                this.$('.btn').addClass('disabled');
             }
         },
         render: function() {
