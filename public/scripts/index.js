@@ -140,27 +140,27 @@ jQuery(function() {
             this.model.get('properties').on('change:progress', this.onProgress, this);
         },
         onShare: function() {
-            if(this.$('.share').parent().hasClass('disabled')) {
+            if(this.$('.share').hasClass('disabled')) {
                 return;
             }
 
-            this.$('.share').parent().addClass('disabled');
+            this.$('.share').addClass('disabled');
             var length = this.model.get('file').length;
             var name = this.model.get('properties').get('name');
             var msg = 'Sharing a ' + length + ' file bundle: ' + name;
             var req = sendFB(msg);
             var reEnable = _.bind(function() {
-                this.$('.share').parent().removeClass('disabled');
+                this.$('.share').removeClass('disabled');
             }, this);
             req.then(reEnable, reEnable);
         },
         onOpen: function() {
-            if(this.$('.open').parent().hasClass('disabled')) {
+            if(this.$('.open').hasClass('disabled')) {
                 return;
             }
-            this.$('.open').parent().addClass('disabled');
+            this.$('.open').addClass('disabled');
             var reEnable = _.bind(function() {
-                this.$('.open').parent().removeClass('disabled');
+                this.$('.open').removeClass('disabled');
             }, this);
             this.model.open_containing();
             setTimeout(reEnable, 2000);

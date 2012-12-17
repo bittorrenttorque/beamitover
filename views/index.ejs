@@ -94,7 +94,7 @@
         <div class="torrent-info row">
           <div class="name"><strong><@= name @></strong></div>
           <div class="btn-group">
-            <button type="button" class="btn <@ if(disabled) { @>disabled<@ } @>"><div class="<@ if(download) { @>download<@ } else if(ok) { @>ok<@ } @>"></div></button>
+            <button type="button" class="btn<@ if(disabled) { @> disabled<@ } if(download) { @> download<@ } if(ok) { @> ok<@ }@>"><i></i></button>
           </div>
         </div>
         <div class="files"></div>
@@ -104,9 +104,9 @@
         <div class="torrent-info row">
           <div class="name"><strong><@= name @></strong></div>
           <div class="btn-group">
-            <button type="button" class="btn"><div class="share"></div></button>
-            <button type="button" class="btn"><div class="open"></div></button>
-            <button type="button" class="btn"><div class="remove"></div></button>
+            <button type="button" class="btn share"><i></i></button>
+            <button type="button" class="btn open"><i></i></button>
+            <button type="button" class="btn remove"><i></i></button>
           </div>
         </div>
         <div class="fb-progress">
