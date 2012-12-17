@@ -237,7 +237,8 @@ jQuery(function() {
             }
         },
         render: function() {
-            var disabled = !_.isUndefined(this.options.local.get('torrent').get(this.model.id));
+            var torrents = this.options.local.get('torrent');
+            var disabled = !_.isUndefined(torrents) && !_.isUndefined(torrents.get(this.model.id));
             this.$el.html(this.template({
                 name: this.model.get('properties').get('name'),
                 disabled: disabled,

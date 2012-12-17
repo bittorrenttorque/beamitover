@@ -16,17 +16,10 @@ html {
     background-color: #627AAD;
 }
 
-.modal-backdrop.fade.in {
-    opacity: 0.9;
-    background-color: rgb(252, 252, 252);
+.facebox_overlayBG {
+    background-color: white !important;
+    opacity: 0.9 !important;
 }
-.modal-body > .file {
-    width: 100%;
-    height: 16px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
 
 .user > .profile {
     height: 27px;
