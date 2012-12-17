@@ -86,7 +86,7 @@ i.status.error {
 
 .files {
     overflow-y: hidden;
-    max-height: 90px;
+    max-height: 45px;
 }
 .files:hover {
     max-height: none;
