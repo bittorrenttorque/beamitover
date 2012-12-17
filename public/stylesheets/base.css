@@ -120,7 +120,7 @@ i.status.error {
     padding: 0px;
 }
 
-.bundle.well.row .torrent-info {
+.bundle.well.row .torrent-info, .bundle.well.row .bundle-info {
     padding: 10px 10px 10px 19px;
     background-color: #f2f2f2;
 }
@@ -129,7 +129,7 @@ i.status.error {
     background-color: #ddd;
 }
 
-.bundle.row, .file.row, .torrent-info.row, .profile.row {
+.bundle.row, .file.row, .torrent-info.row, .profile.row, .bundle-info.row {
     margin: 0px !important;
 }
 

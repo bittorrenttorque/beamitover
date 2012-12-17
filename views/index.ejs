@@ -131,6 +131,7 @@
               <div class="fileshare">Share New Files</div>
             </a>
           </div>
+          <div class="bundlings"></div>
           <div class="bundles"></div>
         </div>
       </script>
@@ -147,24 +148,20 @@
       </script>
 
       <script type="text/template" id="bundling_template">
-        <div class="modal-header">
-          <h3 class="status">Warming up...</h3>
+        <div class="bundle-info row">
+          <div class="name"><strong><@= status @></strong></div>
         </div>
-        <div class="modal-body">
+        <div class="fb-progress">
+          <div class="fb-bar" style="width: <@= progress @>%;">
+          </div>
+        </div>
+        <div class="files">
           <@ for(var i=0; i<files.length; i++) { @>
-            <div class="file">
+            <div class="file row">
               <div class="name"><@= files[i].name @></div>
               <div class="size"><@= files[i].size @></div>
             </div>
           <@ } @>
-        </div>
-        <div class="fb-progress">
-          <div class="fb-bar" style="width: 0%;">
-          </div>
-        </div>          
-        </div>
-        <div class="modal-footer">
-          <a href="#" class="tell btn primary disabled" data-url="<%= url() %>">Tell friends</a>
         </div>
       </script>
 

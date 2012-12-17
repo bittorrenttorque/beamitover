@@ -112,7 +112,7 @@ jQuery(function() {
     var BundleView = Backbone.View.extend({
         className: 'bundle row well',
         initialize: function() {
-            this.template = _.template($(this.templateId).html());
+            this.template = _.template($(this.templateSelector).html());
             this.model.on('destroy', this.destroy, this);
             this.files = new FileListView({
                 model: this.model
@@ -129,7 +129,7 @@ jQuery(function() {
     });
 
     var SelfBundleView = BundleView.extend({
-        templateId: '#self_bundle_template',
+        templateSelector: '#self_bundle_template',
         events: {
             'click .share': 'onShare',
             'click .open': 'onOpen',
@@ -197,7 +197,7 @@ jQuery(function() {
      *  as well as reflect the state change when you begin downloading it
     **/
     var FriendBundleView = BundleView.extend({
-        templateId: '#friend_bundle_template',
+        templateSelector: '#friend_bundle_template',
         events: {
             'click .download': 'onDownload'
         },
@@ -255,7 +255,7 @@ jQuery(function() {
         },
         onTorrent: function(torrent, torrents) {
             var view = this.createBundleView(torrent);
-            this.$el.append(view.render().el);
+            this.$el.prepend(view.render().el);
         },
         render: function() {
             return this;
@@ -276,100 +276,6 @@ jQuery(function() {
                 model: bundle,
                 local: this.options.local
             });
-        }
-    });
-
-    var ShareBundle = Backbone.Model.extend({
-        defaults: {
-            status: 'Warming up...',
-            progress: 0,
-            complete: false
-        },
-        initialize: function() {
-            var handles = _(this.get('files')).pluck('handle');
-            this.get('btapp').get('torrent').generate({
-                files: handles,
-                callback: _.bind(this.onSuccess, this),
-                error: _.bind(this.onError, this),
-                progress: _.bind(this.onProgress, this)
-            });
-        },
-        onError: function(msg) {
-            this.set({
-                status: 'Horrible failure!',
-                progress: 0
-            });
-        },
-        onComplete: function(files, torrent, torrents) {
-            this.get('btapp').die('torrent ' + this.get('hash'), this.onComplete, this);
-            this.set({
-                complete: true,
-                status: 'Successfully sharing files!',
-            });
-        },
-        onSuccess: function(hash) {
-            this.set({
-                hash: hash
-            });
-            this.get('btapp').live('torrent ' + this.get('hash') + ' file', this.onComplete, this);
-            this.set({
-                progress: 100
-            });
-        },
-        onProgress: function(msg) {
-            this.set({
-                status: 'Bundling...',
-                progress: msg,
-            });
-        }
-    });
-
-    var ShareBundleDialog = Backbone.View.extend({
-        className: 'modal fade',
-        events: {
-            'click .tell': 'tell'
-        },
-        initialize: function() {
-            this.template = _.template($('#bundling_template').html());
-            $('body').append(this.$el);
-            this.$el.html(this.template({
-                files: this.model.get('files'),
-                status: this.model.get('status')
-            }));
-
-            this.model.on('change:status', function() {
-                this.$('.status').text(this.model.get('status'));
-            }, this);
-
-            this.model.on('change:progress', function() {
-                var progress = this.model.get('progress');
-                this.$('.fb-progress>.fb-bar').css('width', progress + '%');
-            }, this);
-
-            this.model.on('change:complete', function() {
-                if(this.model.get('complete')) {
-                    this.$('.tell').removeClass('disabled');
-                }
-            }, this);
-
-            this.$el.modal({
-                show: true,
-                backdrop: true
-            });
-            this.$el.on('hidden', _.bind(function() {
-                this.remove();
-            }, this));
-        },
-        tell: function() {
-            var tell = this.$('.tell');
-            this.$el.modal('hide');
-            var count = this.model.get('btapp').get('torrent').get(this.model.get('hash')).get('file').length;
-            var description = this.model.get('name') + 
-                ' just shared ' + 
-                count + ' file' + 
-                (count === 1 ? '' : 's') +
-                ' using BeamItOver.';
-            sendFB(description);
         }
     });
 
@@ -420,9 +326,6 @@ jQuery(function() {
             });
             this.get('btapp').on('add:connect_remote', this.onConnectRemote, this);
             this.get('btapp').on('remoteStatus', this.onRemoteStatus, this);
-            this.get('btapp').live('torrent *', function(torrent) {
-                console.log('TORRENT', torrent.id);
-            }, this);
             this.trackStatus();
         },
         onConnectRemote: function() {
@@ -442,10 +345,13 @@ jQuery(function() {
         }
     })
 
-    var UserView = Backbone.View.extend({
+    var FriendView = Backbone.View.extend({
         initialize: function() {
             this.template = _.template($(this.options.templateid).html());
-            this.bundles = this.createListView();
+            this.bundles = new FriendBundleListView({
+                model: this.model.get('btapp'),
+                local: this.model.get('local')
+            });
             this.model.on('change:status', this.onStatus, this);
         },
         onStatus: function(status) {
@@ -461,47 +367,155 @@ jQuery(function() {
         }
     });
 
-    var FriendView = UserView.extend({
-        createListView: function() {
-            return new FriendBundleListView({
-                model: this.model.get('btapp'),
-                local: this.model.get('local')
+    /**
+     *  Bundling
+     *
+     *  Keeps the state of a torrent generation "session"...from
+     *  the time that the user selects files, we need to store state
+     *  about how we will create the torrent
+    **/
+    var Bundling = Backbone.Model.extend({
+        defaults: {
+            progress: 0,
+            files: [],
+            status: 'Warming up...'
+        },
+        initialize: function() {
+            _.bindAll(this, 'onSuccess', 'onError', 'onProgress', 'onBundleRequestSuccess', 'onBundleRequestFailure');
+        },
+        bundle: function() {
+            if(this.get('files').length === 0) {
+                this.done();
+                return;
+            }
+            var req = this.get('btapp').get('torrent').generate({
+                files: _(this.get('files')).pluck('handle'),
+                callback: this.onSuccess,
+                error: this.onError,
+                progress: this.onProgress
             });
+            req.then(this.onBundleRequestSuccess, this.onBundleRequestFailure);
+        },
+        onSuccess: function() {
+            log('onSuccess');
+            this.set({
+                progress: 100,
+                status: 'Success! Now sharing files.'
+            });
+            this.done();
+        },
+        onError: function() {
+            log('onError');
+            this.set({
+                status: 'Horrible failure!'
+            });
+            this.done();
+        },
+        onProgress: function(progress) {
+            log('onProgress - ' + progress);
+            this.set({
+                progress: progress,
+                status: 'Bunding...'
+            });
+        },
+        onBundleRequestSuccess: function() {
+            log('onBundleRequestSuccess');
+            this.set('status', 'Bundling requested.');
+        },
+        onBundleRequestFailure: function() {
+            log('onBundleRequestFailure');
+            this.set('status', 'Horrible failure!');
+            this.done();
+        },
+        done: function() {
+            this.collection.remove(this);
+            this.trigger('destroy');
         }
     });
 
-    var SelfView = UserView.extend({
-        bundleListView: SelfBundleListView,
-        events: {
-            'click a.fileshare': 'onShare'
-        },
-        createListView: function() {
-            return new SelfBundleListView({
-                model: this.model.get('btapp')
-            });
-        },
-        onShare: function() {
+    var BundlingView = Backbone.View.extend({
+        templateSelector: '#bundling_template',
+        className: 'bundle row well',
+        initialize: function() {
+            this.template = _.template($(this.templateSelector).html());
+            this.model.on('change', this.render, this);
             this.model.get('btapp').get('os').browse_for_files(_.bind(this.onFiles, this));
+            this.model.on('destroy', this.onDestroy, this);
+        },
+        onDestroy: function() {
+            this.model.off('change', this.render, this);
+            this.model.off('destroy', this.onDestroy, this);
+            this.unbind();
+            this.$el.fadeOut('slow', _.bind(function() {
+                this.remove();
+            }, this));
         },
         onFiles: function(files) {
-            if(files.length === 0) {
-                return 0;
-            }
-            files = _.map(files, function(info) {
+            var friendly = _.map(files, function(info) {
                 return {
                     handle: info.handle,
                     name: getFileName(info.path),
                     size: isDirectory(info.path) ? '~' : bytesToSize(info.size)
                 };
             });
-            var bundle = new ShareBundle({
-                files: files,
-                btapp: this.model.get('btapp'),
-                name: this.model.get('name')
+            this.model.set({
+                files: friendly
             });
-            var bundleView = new ShareBundleDialog({
-                model: bundle
+            this.model.bundle();
+        },
+        render: function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        }
+    })
+
+    var BundlingList = Backbone.Collection.extend({});
+
+    var BundlingListView = Backbone.View.extend({
+        initialize: function() {
+            this.model.on('add', this.onAdd, this);
+        },
+        onAdd: function(model) {
+            var view = new BundlingView({
+                model: model
             });
+            this.$el.append(view.render().el);
+        }
+    });
+
+    var SelfView = Backbone.View.extend({
+        bundleListView: SelfBundleListView,
+        events: {
+            'click a.fileshare': 'onShare'
+        },
+        initialize: function() {
+            this.template = _.template($(this.options.templateid).html());
+            this.bundles = new SelfBundleListView({
+                model: this.model.get('btapp')
+            });
+            
+            this.bundlings = new BundlingListView({
+                model: new BundlingList(),
+                btapp: this.model.get('btapp')
+            });
+            this.model.on('change:status', this.onStatus, this);
+        },
+        onStatus: function(status) {
+            this.$('.status').removeClass('connecting online offline error').addClass(this.model.get('status'));
+        },
+        assign : function (view, selector) {
+            view.setElement(this.$(selector)).render();
+        },
+        render: function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            this.assign(this.bundles, '.bundles');
+            this.assign(this.bundlings, '.bundlings');
+            return this;
+        },
+        onShare: function() {
+            this.bundlings.model.add(new Bundling({
+                btapp: this.model.get('btapp')
+            }));
         }
     });
 
