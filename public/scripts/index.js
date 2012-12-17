@@ -209,12 +209,12 @@ jQuery(function() {
         localAdded: function(torrent) {
             torrent.on('destroy', this.localRemoved, this);
             this.$('.btn').addClass('disabled');
-            this.$('.btn > div').removeClass('download').addClass('ok');
+            this.$('.btn').removeClass('download').addClass('ok');
         },
         // We just deleted the torrent from the local machine...enabled downloading it again
         localRemoved: function() {
             this.$('.btn').removeClass('disabled');
-            this.$('.btn > div').addClass('download').removeClass('ok');
+            this.$('.btn').addClass('download').removeClass('ok');
         },
         // Handles the case where the local machine now has the torrent listed in a friends list,
         // and visa versa...should be a disabled check when we already have it, otherwise a dl btn
@@ -378,7 +378,7 @@ jQuery(function() {
         defaults: {
             progress: 0,
             files: [],
-            status: 'Warming up...'
+            status: 'Selecting files...'
         },
         initialize: function() {
             _.bindAll(this, 'onSuccess', 'onError', 'onProgress', 'onBundleRequestSuccess', 'onBundleRequestFailure');
@@ -446,7 +446,7 @@ jQuery(function() {
             this.model.off('change', this.render, this);
             this.model.off('destroy', this.onDestroy, this);
             this.unbind();
-            this.$el.fadeOut('slow', _.bind(function() {
+            this.$el.fadeOut(3000, _.bind(function() {
                 this.remove();
             }, this));
         },

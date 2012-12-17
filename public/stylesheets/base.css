@@ -99,10 +99,6 @@ i.status.error {
     float: right;
 }
 
-.bundle.well {
-    background: #ccc;
-}
-
 .torrent-info {
     line-height: 27px;
     height: 27px;
@@ -115,6 +111,10 @@ i.status.error {
     float: right;
 }
 
+.bundlings {
+    color: #aaa;
+}
+
 .bundle.well.row {
     margin-top: 10px !important;
     padding: 0px;
@@ -122,10 +122,26 @@ i.status.error {
 
 .bundle.well.row .torrent-info, .bundle.well.row .bundle-info {
     padding: 10px 10px 10px 19px;
+}
+.bundle.well.row .torrent-info {
     background-color: #f2f2f2;
+}
+.bundle.well.row .bundle-info {
+    background-color: #fdfdfd;    
 }
 .bundle.well.row .files {
     padding: 10px 10px 10px 19px;
+}
+.bundle.well.row .files {
+    background-color: #ddd;
+}
+.bundlings > .bundle.well.row .files {
+    background-color: #f8f8f8;
+}
+.bundlings > .bundle.well.row {
+    border: 1px solid #f8f8f8;
+}
+.bundlings > .bundle.well.row .fb-bar {
     background-color: #ddd;
 }
 
