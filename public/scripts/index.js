@@ -420,7 +420,7 @@ jQuery(function() {
         },
         onBundleRequestSuccess: function() {
             log('onBundleRequestSuccess');
-            this.set('status', 'Bundling requested.');
+            this.set('status', 'Bundling queued.');
         },
         onBundleRequestFailure: function() {
             log('onBundleRequestFailure');
