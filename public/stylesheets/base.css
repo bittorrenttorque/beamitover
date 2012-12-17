@@ -85,8 +85,8 @@ i.status.error {
 }
 
 .files {
-    overflow-y: hidden;
-    max-height: 45px;
+    overflow: hidden;
+    max-height: 42px;
 }
 .files:hover {
     max-height: none;
@@ -129,10 +129,10 @@ i.status.error {
 .bundle.well.row .bundle-info {
     background-color: #fdfdfd;    
 }
-.bundle.well.row .files {
+.bundle.well.row .filesborder {
     padding: 10px 10px 10px 19px;
 }
-.bundle.well.row .files {
+.bundle.well.row .filesborder {
     background-color: #ddd;
 }
 .bundlings > .bundle.well.row .files {
