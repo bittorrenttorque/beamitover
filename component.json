@@ -1,19 +1,9 @@
 {
-  "name": "facebook-template-nodejs",
+  "name": "beamitover",
   "version": "0.0.0",
   "dependencies": {
     "btapp": "latest",
     "backbrace": "latest",
-    "fbootstrapp": "git://github.com/bittorrenttorque/fbootstrapp.git"
-  },
-  "gitHead": "623e6ceafec1ee7ff4912ffda01810a8146b771b",
-  "readme": "Facebook/Heroku sample app -- Node.js\n=====================================\n\nThis is a sample app showing use of the Facebook Graph API, written in Node.js, designed for deployment to [Heroku](http://www.heroku.com/).\n\nRun locally\n-----------\n\nInstall dependencies:\n\n    npm bundle install\n\n[Create an app on Facebook](https://developers.facebook.com/apps) and set the Website URL to `http://localhost:5000/`.\n\nCopy the App ID and Secret from the Facebook app settings page into your `.env`:\n\n    echo FACEBOOK_APP_ID=12345 >> .env\n    echo FACEBOOK_SECRET=abcde >> .env\n\nLaunch the app with [Foreman](http://blog.daviddollar.org/2011/05/06/introducing-foreman.html):\n\n    foreman start\n\nDeploy to Heroku via Facebook integration\n-----------------------------------------\n\nThe easiest way to deploy is to create an app on Facebook and click Cloud Services -> Get Started, then choose Node.js from the dropdown.  You can then `git clone` the resulting app from Heroku.\n\nDeploy to Heroku directly\n-------------------------\n\nIf you prefer to deploy yourself, push this code to a new Heroku app on the Cedar stack, then copy the App ID and Secret into your config vars:\n\n    heroku create --stack cedar\n    git push heroku master\n    heroku config:add FACEBOOK_APP_ID=12345 FACEBOOK_SECRET=abcde\n\nEnter the URL for your Heroku app into the Website URL section of the Facebook app settings page, hen you can visit your app on the web.\n\n",
-  "readmeFilename": "Readme.md",
-  "_id": "beamitover@0.0.1",
-  "description": "Facebook/Heroku sample app -- Node.js =====================================",
-  "commit": "623e6ceafec1ee7ff4912ffda01810a8146b771b",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/pwmckenna/facebook-template-nodejs.git"
+    "fbootstrapp": "git://github.com/bittorrenttorque/fbootstrapp.git#~1.5.0"
   }
 }
