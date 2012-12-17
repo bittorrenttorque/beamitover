@@ -4,7 +4,7 @@
     <!-- redirect if we are not logged in -->
     <% if (!user) { %>
       <script>
-        var redirect_url = 'http://apps.facebook.com/<%= app.id %>/';
+        var redirect_url = 'http://apps.facebook.com/<%= app.namespace %>/';
         self.parent.location = 'http://www.facebook.com/dialog/oauth/' + 
           '?client_id=<%= app.id %>&redirect_uri=' + redirect_url;
       </script>
