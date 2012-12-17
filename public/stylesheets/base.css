@@ -135,7 +135,7 @@ i.status.error {
 .bundle.well.row .filesborder {
     background-color: #ddd;
 }
-.bundlings > .bundle.well.row .files {
+.bundlings > .bundle.well.row .filesborder {
     background-color: #f8f8f8;
 }
 .bundlings > .bundle.well.row {

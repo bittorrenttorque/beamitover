@@ -159,13 +159,15 @@
           <div class="fb-bar" style="width: <@= progress @>%;">
           </div>
         </div>
-        <div class="files">
-          <@ for(var i=0; i<files.length; i++) { @>
-            <div class="file row">
-              <div class="name"><@= files[i].name @></div>
-              <div class="size"><@= files[i].size @></div>
-            </div>
-          <@ } @>
+        <div class="filesborder">
+          <div class="files">
+            <@ for(var i=0; i<files.length; i++) { @>
+              <div class="file row">
+                <div class="name"><@= files[i].name @></div>
+                <div class="size"><@= files[i].size @></div>
+              </div>
+            <@ } @>
+          </div>
         </div>
       </script>
 
