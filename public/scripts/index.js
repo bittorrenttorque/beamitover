@@ -257,17 +257,20 @@ jQuery(function() {
         },
         // Handles clicks to the download button
         onDownload: function() {
+            // Make sure we only handle events from the button when its not disabled
+            if(this.$('.btn').hasClass('disabled')) {
+                return;
+            }
+
             analytics.track('Download Bundle', {
                 size: this.model.get('properties').get('size'),
                 files: this.model.get('file').length
             });
-            // Make sure we only handle events from the button when its not disabled
-            if(!this.$('.btn').hasClass('disabled')) {
-                this.options.local.get('torrent').download({
-                    url: this.model.get('properties').get('uri')
-                });
-                this.$('.btn').addClass('disabled');
-            }
+
+            this.options.local.get('torrent').download({
+                url: this.model.get('properties').get('uri')
+            });
+            this.$('.btn').addClass('disabled');
         },
         render: function() {
             var torrents = this.options.local.get('torrent');
