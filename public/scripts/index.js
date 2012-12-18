@@ -177,15 +177,24 @@ jQuery(function() {
             }, this));
         },
         onProgress: function() {
+            var progress = this.model.get('properties').get('progress') / 10.0;
             this.$('.fb-progress>.fb-bar').css(
                 'width', 
-                this.model.get('properties').get('progress') / 10.0 + '%'
+                progress + '%'
             );
+            if(progress === 100) {
+                this.$('.btn.open').removeClass('disabled');
+                this.$('.btn.share').removeClass('disabled');
+            }
         },
         render: function() {
+            var progress = this.model.get('properties').get('progress') / 10.0;
+            var complete = progress === 100;
+            log(progress, complete);
             this.$el.html(this.template({
                 name: this.model.get('properties').get('name'),
-                progress: this.model.get('properties').get('progress') / 10.0 + '%'
+                progress: progress + '%',
+                complete: complete
             }));
             this.assign(this.files, '.files');
             return this;

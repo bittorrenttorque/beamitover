@@ -106,8 +106,8 @@
         <div class="torrent-info row">
           <div class="name"><strong><@= name @></strong></div>
           <div class="btn-group">
-            <button type="button" class="btn share"><i></i></button>
-            <button type="button" class="btn open"><i></i></button>
+            <button type="button" class="btn share<@ if(!complete) { @> disabled<@ } @>"><i></i></button>
+            <button type="button" class="btn open<@ if(!complete) { @> disabled<@ } @>"><i></i></button>
             <button type="button" class="btn remove"><i></i></button>
           </div>
         </div>
