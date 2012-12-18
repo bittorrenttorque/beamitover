@@ -84,14 +84,6 @@ i.status.error {
     float: left;
 }
 
-.files {
-    overflow: hidden;
-    max-height: 42px;
-}
-.files:hover {
-    max-height: none;
-}
-
 .file > .name {
     float: left;
 }
