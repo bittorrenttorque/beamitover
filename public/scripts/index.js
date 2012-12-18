@@ -1,6 +1,6 @@
 function log() {
     if (console && console.log) {
-        console.log.apply(console.log, arguments);
+        console.log.apply(console, arguments);
     }
 }
 
