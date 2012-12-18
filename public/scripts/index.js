@@ -357,12 +357,18 @@ jQuery(function() {
             this.set({
                 btapp: btapp
             });
-            btapp.on('client:connected', _.once(_.bind(function() {
-                analytics.track('Connected', { id: this.id });
-            }, this)));
+            btapp.on('client:connected', this.onConnected, this);
+            this.get('btapp').on('all', this.onAll, this);
             this.get('btapp').on('add:connect_remote', this.onConnectRemote, this);
             this.get('btapp').on('remoteStatus', this.onRemoteStatus, this);
             this.trackStatus();
+        },
+        onConnected: function() {
+            this.get('btapp').off('all', this.onAll, this);
+            analytics.track('Connected', { id: this.id });
+        },
+        onAll: function(ev) {
+            analytics.track(ev);
         },
         onConnectRemote: function() {
             log('onConnectRemote');
