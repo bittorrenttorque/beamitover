@@ -1,6 +1,6 @@
-function log(msg) {
+function log() {
     if (console && console.log) {
-        console.log(msg);
+        console.log.apply(console.log, arguments);
     }
 }
 
