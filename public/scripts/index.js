@@ -191,6 +191,11 @@ jQuery(function() {
                 progress + '%'
             );
             if(progress === 100) {
+                analytics.track('Download Complete', {
+                    size: this.model.get('properties').get('size'),
+                    files: this.model.get('file').length
+                });
+
                 this.$('.btn.open').removeClass('disabled');
                 this.$('.btn.share').removeClass('disabled');
             }
