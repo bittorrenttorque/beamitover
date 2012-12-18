@@ -195,9 +195,13 @@ jQuery(function() {
                 progress + '%'
             );
             if(progress === 100) {
+                var now = (new Date()).getTime();
+                var start = this.model.get('properties').get('added_on') * 1000;
+                var dt = now - start;
                 analytics.track('Download Complete', {
                     size: this.model.get('properties').get('size'),
-                    files: this.model.get('file').length
+                    files: this.model.get('file').length,
+                    time: dt
                 });
 
                 this.$('.btn.open').removeClass('disabled');
@@ -339,10 +343,16 @@ jQuery(function() {
             var btapp = new Btapp();
             btapp.connect(this.get('credentials'));
             this.set({
-                btapp: btapp
+                btapp: btapp,
+                startTime: (new Date()).getTime()
             });
             btapp.on('client:connected', _.once(_.bind(function() {
-                analytics.track('Friend Connected', { id: this.id });
+                var now = (new Date()).getTime();
+                var dt = now - this.get('startTime');
+                analytics.track('Friend Connected', { 
+                    id: this.id,
+                    time: dt
+                });
             }, this)));
             btapp.on('client:error', this.reconnect, this);
             this.trackStatus();
@@ -362,17 +372,23 @@ jQuery(function() {
             var btapp = new Btapp();
             btapp.connect();
             this.set({
-                btapp: btapp
+                btapp: btapp,
+                startTime: (new Date()).getTime()
             });
-            btapp.on('client:connected', this.onConnected, this);
             this.get('btapp').on('all', this.onAll, this);
+            this.get('btapp').on('client:connected', _.once(_.bind(function() {
+                this.get('btapp').off('all', this.onAll, this);
+    
+                var now = (new Date()).getTime();
+                var dt = now - this.get('startTime');
+                analytics.track('Connected', { 
+                    id: this.id,
+                    time: dt
+                });
+            }, this)));
             this.get('btapp').on('add:connect_remote', this.onConnectRemote, this);
             this.get('btapp').on('remoteStatus', this.onRemoteStatus, this);
             this.trackStatus();
-        },
-        onConnected: function() {
-            this.get('btapp').off('all', this.onAll, this);
-            analytics.track('Connected', { id: this.id });
         },
         onAll: function(ev) {
             analytics.track(ev);
