@@ -446,7 +446,11 @@ jQuery(function() {
             req.then(this.onBundleRequestSuccess, this.onBundleRequestFailure);
         },
         onSuccess: function() {
-            analytics.track('Bundle Success');
+            var now = (new Date()).getTime();
+            var dt = now - this.get('startTime');
+            analytics.track('Bundle Success', {
+                time: dt
+            });
             log('onSuccess');
             this.set({
                 progress: 100,
@@ -472,6 +476,7 @@ jQuery(function() {
         onBundleRequestSuccess: function() {
             log('onBundleRequestSuccess');
             this.set('status', 'Bundling queued.');
+            this.set('startTime', (new Date()).getTime());
         },
         onBundleRequestFailure: function() {
             log('onBundleRequestFailure');
