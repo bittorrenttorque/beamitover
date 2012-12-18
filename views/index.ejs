@@ -211,11 +211,11 @@
 
           analytics.load('bljzt00');
           analytics.identify(<%= user.id %>, {
-            name: "<%= user.name %>",
-            link: "<%= user.link %>",
-            location: "<%= user.location.name %>",
-            gender: "<%= user.gender %>",
-            friends: <%= req.friends_using_app.length %>
+            // name: "<%= user.name %>",
+            // link: "<%= user.link %>",
+            // location: "<%= user.location.name %>",
+            // gender: "<%= user.gender %>",
+            // friends: <%= req.friends_using_app.length %>
           });
           var self = new beamitover.Self({
             id: <%= user.id %>,
