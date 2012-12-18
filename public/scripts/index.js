@@ -158,6 +158,10 @@ jQuery(function() {
             req.then(reEnable, reEnable);
         },
         onOpen: function() {
+            analytics.track('Open Folder', {
+                size: this.model.get('properties').get('size'),
+                files: this.model.get('file').length
+            });
             if(this.$('.open').hasClass('disabled')) {
                 return;
             }
@@ -169,6 +173,10 @@ jQuery(function() {
             setTimeout(reEnable, 2000);
         },
         onRemove: function() {
+            analytics.track('Remove Bundle', {
+                size: this.model.get('properties').get('size'),
+                files: this.model.get('file').length
+            });
             this.$el.hide();
             this.model.remove().then(_.bind(function() {
                 this.$el.remove();
@@ -240,6 +248,10 @@ jQuery(function() {
         },
         // Handles clicks to the download button
         onDownload: function() {
+            analytics.track('Download Bundle', {
+                size: this.model.get('properties').get('size'),
+                files: this.model.get('file').length
+            });
             // Make sure we only handle events from the button when its not disabled
             if(!this.$('.btn').hasClass('disabled')) {
                 this.options.local.get('torrent').download({
@@ -317,6 +329,9 @@ jQuery(function() {
             this.set({
                 btapp: btapp
             });
+            btapp.on('client:connected', _.once(_.bind(function() {
+                analytics.track('Friend Connected', { id: this.id });
+            }, this)));
             btapp.on('client:error', this.reconnect, this);
             this.trackStatus();
         },
@@ -337,6 +352,9 @@ jQuery(function() {
             this.set({
                 btapp: btapp
             });
+            btapp.on('client:connected', _.once(_.bind(function() {
+                analytics.track('Connected', { id: this.id });
+            }, this)));
             this.get('btapp').on('add:connect_remote', this.onConnectRemote, this);
             this.get('btapp').on('remoteStatus', this.onRemoteStatus, this);
             this.trackStatus();
@@ -410,6 +428,7 @@ jQuery(function() {
             req.then(this.onBundleRequestSuccess, this.onBundleRequestFailure);
         },
         onSuccess: function() {
+            analytics.track('Bundle Success');
             log('onSuccess');
             this.set({
                 progress: 100,
@@ -418,6 +437,7 @@ jQuery(function() {
             this.done();
         },
         onError: function() {
+            analytics.track('Bundle Error');
             log('onError');
             this.set({
                 status: 'Horrible failure!'
