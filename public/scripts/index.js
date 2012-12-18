@@ -28,7 +28,7 @@ function sendFB(description) {
             description : description
         },
         function (response) {
-            analytics.track('FB Message Sent', response);
+            analytics.track('facebook:message', response);
             // If response is null the user canceled the dialog
             if (response != null) {
                 ret.resolve();
@@ -49,7 +49,7 @@ function inviteFB(message) {
             message : message
         },
         function (response) {
-            analytics.track('FB App Invite', response);
+            analytics.track('facebook:app_invite', response);
             // If response is null the user canceled the dialog
             if (response != null) {
                 ret.resolve();
@@ -162,7 +162,7 @@ jQuery(function() {
                 return;
             }
 
-            analytics.track('Open Folder', {
+            analytics.track('torrent:open_folder', {
                 size: this.model.get('properties').get('size'),
                 files: this.model.get('file').length
             });
@@ -177,7 +177,7 @@ jQuery(function() {
         onRemove: function() {
             this.$el.hide();
 
-            analytics.track('Remove Bundle', {
+            analytics.track('torrent:remove', {
                 size: this.model.get('properties').get('size'),
                 files: this.model.get('file').length
             });
@@ -198,7 +198,7 @@ jQuery(function() {
                 var now = (new Date()).getTime();
                 var start = this.model.get('properties').get('added_on') * 1000;
                 var dt = now - start;
-                analytics.track('Download Complete', {
+                analytics.track('torrent:complete', {
                     size: this.model.get('properties').get('size'),
                     files: this.model.get('file').length,
                     time: dt
@@ -266,7 +266,7 @@ jQuery(function() {
                 return;
             }
 
-            analytics.track('Download Bundle', {
+            analytics.track('torrent:added', {
                 size: this.model.get('properties').get('size'),
                 files: this.model.get('file').length
             });
@@ -349,7 +349,7 @@ jQuery(function() {
             btapp.on('client:connected', _.once(_.bind(function() {
                 var now = (new Date()).getTime();
                 var dt = now - this.get('startTime');
-                analytics.track('Friend Connected', { 
+                analytics.track('connected:friend', { 
                     id: this.id,
                     time: dt
                 });
@@ -381,7 +381,7 @@ jQuery(function() {
     
                 var now = (new Date()).getTime();
                 var dt = now - this.get('startTime');
-                analytics.track('Connected', { 
+                analytics.track('connected:self', { 
                     id: this.id,
                     time: dt
                 });
@@ -464,7 +464,7 @@ jQuery(function() {
         onSuccess: function() {
             var now = (new Date()).getTime();
             var dt = now - this.get('startTime');
-            analytics.track('Bundle Success', {
+            analytics.track('torrent:created', {
                 time: dt
             });
             log('onSuccess');
@@ -475,7 +475,6 @@ jQuery(function() {
             this.done();
         },
         onError: function() {
-            analytics.track('Bundle Error');
             log('onError');
             this.set({
                 status: 'Horrible failure!'
