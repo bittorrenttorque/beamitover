@@ -28,10 +28,12 @@ function sendFB(description) {
             description : description
         },
         function (response) {
-        // If response is null the user canceled the dialog
+            analytics.track('FB Message Sent', response);
+            // If response is null the user canceled the dialog
             if (response != null) {
                 ret.resolve();
             } else {
+
                 ret.reject();
             }
         }
@@ -47,7 +49,8 @@ function inviteFB(message) {
             message : message
         },
         function (response) {
-        // If response is null the user canceled the dialog
+            analytics.track('FB App Invite', response);
+            // If response is null the user canceled the dialog
             if (response != null) {
                 ret.resolve();
             } else {
