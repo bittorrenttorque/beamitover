@@ -158,13 +158,15 @@ jQuery(function() {
             req.then(reEnable, reEnable);
         },
         onOpen: function() {
+            if(this.$('.open').hasClass('disabled')) {
+                return;
+            }
+
             analytics.track('Open Folder', {
                 size: this.model.get('properties').get('size'),
                 files: this.model.get('file').length
             });
-            if(this.$('.open').hasClass('disabled')) {
-                return;
-            }
+
             this.$('.open').addClass('disabled');
             var reEnable = _.bind(function() {
                 this.$('.open').removeClass('disabled');
@@ -173,11 +175,13 @@ jQuery(function() {
             setTimeout(reEnable, 2000);
         },
         onRemove: function() {
+            this.$el.hide();
+
             analytics.track('Remove Bundle', {
                 size: this.model.get('properties').get('size'),
                 files: this.model.get('file').length
             });
-            this.$el.hide();
+
             this.model.remove().then(_.bind(function() {
                 this.$el.remove();
             }, this), _.bind(function() {
