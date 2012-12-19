@@ -582,7 +582,6 @@ jQuery(function() {
                 model: this.model.get('btapp')
             });
             
-            this.model.get('btapp').on('all', _.bind(console.log, console));
             this.model.get('btapp').on('add:browseforfiles', function() {
                 this.$('.fileshare').removeClass('disabled');
             }, this);

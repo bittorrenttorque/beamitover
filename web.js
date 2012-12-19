@@ -23,7 +23,7 @@ var app = express.createServer(
   require('faceplate').middleware({
     app_id: process.env.FACEBOOK_APP_ID,
     secret: process.env.FACEBOOK_SECRET,
-    scope:  'user_likes,user_photos,user_photo_video_tags'
+    scope:  'user_likes,user_photos,email'
   })
 );
 
@@ -56,6 +56,7 @@ app.dynamicHelpers({
 function render_page(req, res) {
   req.facebook.app(function(app) {
     req.facebook.me(function(user) {
+      console.log(user);
       res.render('index.ejs', {
         layout:    false,
         req:       req,
@@ -75,7 +76,14 @@ function handle_facebook_request(req, res) {
       function(cb) {
         // use fql to get a list of my friends that are using this app
         req.facebook.fql('SELECT uid, name, first_name, is_app_user, pic_square FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1 = me()) AND is_app_user = 1', function(result) {
-          req.friends_using_app = result; 
+          req.friends_using_app = result;
+          cb();
+        });
+      },
+      function(cb) {
+        req.facebook.fql('SELECT email FROM user where uid = me()', function(result) {
+          console.log(result);
+          req.email = result;
           cb();
         });
       }
