@@ -86,6 +86,13 @@
         </header>
       </div>
 
+      <script type="text/template" id="alert_template">
+        <div class="alert alert-info">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong><@= title @></strong>&nbsp;&nbsp;<@= msg @>
+        </div>
+      </script>
+
       <script type="text/template" id="friend_bundle_template">
         <div class="torrent-info row">
           <div class="name"><strong><@= name @></strong></div>
@@ -178,6 +185,8 @@
     <script type="text/javascript" src="/components/backbone/backbone.js"></script>
     <script type="text/javascript" src="/components/btapp/btapp.min.js"></script>
     <script type="text/javascript" src="/components/backbrace/backbrace.js"></script>
+
+    <script type="text/javascript" src="/components/bootstrap/js/bootstrap-alert.js"></script>
     <script type="text/javascript" src="/scripts/index.js"></script>
  
     <script>

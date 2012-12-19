@@ -1,3 +1,11 @@
+//we're using server side templating in ejs, which uses erb templating as well,
+//so we need to change underscore's syntax so we can have client templates within
+//server templates
+_.templateSettings = {
+    interpolate: /\<\@\=(.+?)\@\>/gim,
+    evaluate: /\<\@(.+?)\@\>/gim
+};
+
 function log() {
     if (console && console.log) {
         console.log.apply(console, arguments);
@@ -62,12 +70,20 @@ function inviteFB(message) {
 }
 
 jQuery(function() {
-    //we're using server side templating in ejs, which uses erb templating as well,
-    //so we need to change underscore's syntax so we can have client templates within
-    //server templates
-    _.templateSettings = {
-        interpolate: /\<\@\=(.+?)\@\>/gim,
-        evaluate: /\<\@(.+?)\@\>/gim
+    var displayAlertBefore = function(elem, title, msg, time) {
+        var alertTemplate = _.template($('#alert_template').html());
+        var child = $(alertTemplate({
+            title: title,
+            msg: msg
+        }));
+        elem.before(child);
+        if(time) {
+            setTimeout(function() {
+                child.slideUp('slow', function() {
+                    child.alert('close');
+                })
+            }, time);
+        }
     };
 
     var FileView = Backbone.View.extend({
@@ -265,6 +281,8 @@ jQuery(function() {
             if(this.$('.btn').hasClass('disabled')) {
                 return;
             }
+
+            displayAlertBefore(this.$el, 'Downloading!', 'Watch the download progress above in your \'Your bundles\'', 5000);
 
             analytics.track('torrent:added', {
                 size: this.model.get('properties').get('size'),
