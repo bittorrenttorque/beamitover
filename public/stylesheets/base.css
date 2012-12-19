@@ -2,6 +2,10 @@ html {
     overflow-y: auto !important;
 }
 
+.container {
+    width: 760px;
+}
+
 .user.well, .hero-unit {
     border: 1px solid rgba(0, 0, 0, 0.25) !important;
 }

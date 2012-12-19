@@ -4,6 +4,6 @@
   "dependencies": {
     "btapp": "latest",
     "backbrace": "latest",
-    "fbootstrapp": "git://github.com/bittorrenttorque/fbootstrapp.git#~1.5.0"
+    "bootstrap": "~2.2.2"
   }
 }

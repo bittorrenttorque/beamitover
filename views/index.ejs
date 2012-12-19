@@ -12,7 +12,7 @@
 
     <meta charset="utf-8" />
     <title><%= app.name %></title>
-    <link rel="stylesheet" href="/components/fbootstrapp/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="/components/bootstrap/docs/assets/css/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="/stylesheets/base.css" type="text/css" />
 
 
@@ -73,12 +73,9 @@
     <div class="container canvas">
       <div class="hero-unit">
         <header class="clearfix">
-          <% if (user) { %>
-          <p id="picture" style="background-image: url(https://graph.facebook.com/<%= user.id %>/picture?type=normal)"></p>
-
           <div>
-            <h1><%= app.name %></h1>
-            <p class="tagline">
+            <img src="/images/logo.png" />
+            <p>
               Free unlimited file sharing directly to and from your friends.
             </p>
             <br>
@@ -86,7 +83,6 @@
               <span class="apprequests">Invite your friends!</span>
             </a>
           </div>
-          <% } %>
         </header>
       </div>
 
