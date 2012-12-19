@@ -535,9 +535,8 @@ jQuery(function() {
             this.model.off('change', this.render, this);
             this.model.off('destroy', this.onDestroy, this);
             this.unbind();
-            this.$el.fadeOut(3000, _.bind(function() {
-                this.remove();
-            }, this));
+            displayAlertBefore(this.$el, 'Bundled!', 'Your files will be accessible whenever you\'re connected to the internet', 10000);
+            this.remove();
         },
         onFiles: function(files) {
             var friendly = _.map(files, function(info) {
