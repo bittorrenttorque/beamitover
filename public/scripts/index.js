@@ -582,6 +582,11 @@ jQuery(function() {
                 model: this.model.get('btapp')
             });
             
+            this.model.get('btapp').on('all', _.bind(console.log, console));
+            this.model.get('btapp').on('add:browseforfiles', function() {
+                this.$('.fileshare').removeClass('disabled');
+            }, this);
+
             this.bundlings = new BundlingListView({
                 model: new BundlingList(),
                 btapp: this.model.get('btapp')
@@ -589,6 +594,7 @@ jQuery(function() {
             this.model.on('change:status', this.onStatus, this);
         },
         onStatus: function(status) {
+            this.$('.fileshare').addClass('disabled');
             this.$('.status').removeClass('connecting online offline error').addClass(this.model.get('status'));
         },
         assign : function (view, selector) {
