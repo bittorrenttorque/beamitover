@@ -192,30 +192,35 @@ jQuery(function() {
         },
         onRemove: function() {
             this.$el.hide();
-
+            var properties = this.model.get('properties');
+            var original = properties.get('added_on') === properties.get('created_on');
             analytics.track('torrent:remove', {
-                size: this.model.get('properties').get('size'),
-                files: this.model.get('file').length
+                size: properties.get('size'),
+                files: this.model.get('file').length,
+                original: original
             });
 
-            this.model.remove().then(_.bind(function() {
+            //if we created the torrent, only remove the torrent
+            //if we downloaded the torrent, remove everything
+            this.model.remove(original ? 0 : 3).then(_.bind(function() {
                 this.$el.remove();
             }, this), _.bind(function() {
                 this.$el.show();
             }, this));
         },
         onProgress: function() {
-            var progress = this.model.get('properties').get('progress') / 10.0;
+            var properties = this.model.get('properties');
+            var progress = properties.get('progress') / 10.0;
             this.$('.fb-progress>.fb-bar').css(
                 'width', 
                 progress + '%'
             );
             if(progress === 100) {
                 var now = (new Date()).getTime();
-                var start = this.model.get('properties').get('added_on') * 1000;
+                var start = properties.get('added_on') * 1000;
                 var dt = now - start;
                 analytics.track('torrent:complete', {
-                    size: this.model.get('properties').get('size'),
+                    size: properties.get('size'),
                     files: this.model.get('file').length,
                     time: dt
                 });
@@ -225,13 +230,17 @@ jQuery(function() {
             }
         },
         render: function() {
-            var progress = this.model.get('properties').get('progress') / 10.0;
+            var properties = this.model.get('properties');
+            var progress = properties.get('progress') / 10.0;
             var complete = progress === 100;
-            log(progress, complete);
+
+            var name = properties.get('name');
+            var original = properties.get('added_on') === properties.get('created_on');
             this.$el.html(this.template({
-                name: this.model.get('properties').get('name'),
+                name: name,
                 progress: progress + '%',
-                complete: complete
+                complete: complete,
+                original: original
             }));
             this.assign(this.files, '.files');
             return this;
