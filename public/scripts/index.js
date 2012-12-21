@@ -27,6 +27,13 @@ function isDirectory(path) {
     return path.substr(-5).indexOf('.') === -1;
 }
 
+function sendTorrentFB(torrent) {
+    var length = torrent.get('file').length;
+    var name = torrent.get('properties').get('name');
+    var msg = 'Sharing a ' + length + ' file bundle: ' + name;
+    return sendFB(msg);
+}
+
 function sendFB(description) {
     var ret = new jQuery.Deferred();
     FB.ui(
@@ -36,12 +43,12 @@ function sendFB(description) {
             description : description
         },
         function (response) {
-            analytics.track('facebook:message', response);
             // If response is null the user canceled the dialog
             if (response != null) {
+                analytics.track('facebook:message_sent', response);
                 ret.resolve();
             } else {
-
+                analytics.track('facebook:message_cancelled');
                 ret.reject();
             }
         }
@@ -57,11 +64,12 @@ function inviteFB(message) {
             message : message
         },
         function (response) {
-            analytics.track('facebook:app_invite', response);
             // If response is null the user canceled the dialog
             if (response != null) {
+                analytics.track('facebook:app_invite_sent', response);
                 ret.resolve();
             } else {
+                analytics.track('facebook:app_invite_cancelled');
                 ret.reject();
             }
         }
@@ -164,10 +172,7 @@ jQuery(function() {
             }
 
             this.$('.share').addClass('disabled');
-            var length = this.model.get('file').length;
-            var name = this.model.get('properties').get('name');
-            var msg = 'Sharing a ' + length + ' file bundle: ' + name;
-            var req = sendFB(msg);
+            var req = sendTorrentFB(this.model);
             var reEnable = _.bind(function() {
                 this.$('.share').removeClass('disabled');
             }, this);
@@ -488,7 +493,7 @@ jQuery(function() {
             });
             req.then(this.onBundleRequestSuccess, this.onBundleRequestFailure);
         },
-        onSuccess: function() {
+        onSuccess: function(hash) {
             var now = (new Date()).getTime();
             var dt = now - this.get('startTime');
             analytics.track('torrent:created', {
@@ -497,8 +502,21 @@ jQuery(function() {
             log('onSuccess');
             this.set({
                 progress: 100,
+                hash: hash
+            });
+
+            this.get('btapp').live('torrent ' + this.get('hash'), this.onBundleAvailable, this);
+        },
+        onBundleAvailable: function(torrent) {
+            this.get('btapp').die('torrent ' + this.get('hash'), this.onBundleAvailable, this);
+            var onBundleShared = _.bind(this.onBundleShared, this);
+            sendTorrentFB(torrent).then(onBundleShared, onBundleShared);
+        },
+        onBundleShared: function() {
+            this.set({
                 status: 'Success! Now sharing files.'
             });
+            this.trigger('success');
             this.done();
         },
         onError: function() {
@@ -537,14 +555,18 @@ jQuery(function() {
         initialize: function() {
             this.template = _.template($(this.templateSelector).html());
             this.model.on('change', this.render, this);
+            this.model.on('success', this.onSuccess, this);
             this.model.get('btapp').get('os').browse_for_files(_.bind(this.onFiles, this));
             this.model.on('destroy', this.onDestroy, this);
         },
+        onSuccess: function() {
+            displayAlertBefore(this.$el, 'Bundled!', 'Your files will be accessible whenever you\'re connected to the internet', 10000);
+        },
         onDestroy: function() {
+            this.model.off('success', this.onSuccess, this);
             this.model.off('change', this.render, this);
             this.model.off('destroy', this.onDestroy, this);
             this.unbind();
-            displayAlertBefore(this.$el, 'Bundled!', 'Your files will be accessible whenever you\'re connected to the internet', 10000);
             this.remove();
         },
         onFiles: function(files) {
