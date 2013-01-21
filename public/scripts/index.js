@@ -470,9 +470,10 @@ jQuery(function() {
                 }
             }
 
-            this.$el.parent().children('.user.well.friend').sort(function(a, b) {
+            var sorted = this.$el.parent().children('.user.well.friend').sort(function(a, b) {
                 return rankUserElementsByStatus(a) - rankUserElementsByStatus(b);
             });
+            this.$el.parent().append(sorted);
         },
         assign : function (view, selector) {
             view.setElement(this.$(selector)).render();

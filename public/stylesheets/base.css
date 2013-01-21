@@ -83,7 +83,6 @@ html {
     margin-top: 10px;
     margin-left: 7px;
 }
-*/
 .error > i.status {
     background-image: url(/images/QlrR_y6HLs5.png);
     background-position: -809px -55px;
@@ -95,6 +94,7 @@ html {
     height: 11px;
     float: left;
 }
+*/
 .file > .name {
     float: left;
 }
