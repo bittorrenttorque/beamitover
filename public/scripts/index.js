@@ -455,8 +455,7 @@ jQuery(function() {
         onStatus: function(status) {
             this.$('.profile').removeClass('connecting online offline error').addClass(this.model.get('status'));
 
-            var rankUserElementsByStatus = function(elem) {
-                var user = $(elem);
+            var rankUserElementsByStatus = function(user) {
                 if(user.children('.profile').hasClass('online')) {
                     return 3;
                 } else if(user.children('.profile').hasClass('connecting')) {
@@ -470,10 +469,23 @@ jQuery(function() {
                 }
             }
 
-            var sorted = this.$el.parent().children('.user.well.friend').sort(function(a, b) {
-                return rankUserElementsByStatus(b) - rankUserElementsByStatus(a);
-            });
-            this.$el.parent().append(sorted);
+            while(true) {
+                var prev = this.$el.prev('.user.well.friend');
+                var next = this.$el.next('.user.well.friend');
+
+                var rank = rankUserElementsByStatus(this.$el);
+
+                var prevRank = prev.length === 0 ? 3 : rankUserElementsByStatus(prev);
+                var nextRank = next.length === 0 ? 0 : rankUserElementsByStatus(next);
+
+                if(rank > prevRank) {
+                    this.$el.insertBefore(prev);
+                } else if(rank < nextRank) {
+                    this.$el.insertAfter(next);
+                } else {
+                    break;
+                }
+            }
         },
         assign : function (view, selector) {
             view.setElement(this.$(selector)).render();
