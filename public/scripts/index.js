@@ -395,7 +395,7 @@ jQuery(function() {
                 setTimeout(_.bind(function() {
                     this.get('btapp').connect(this.get('credentials'));
                 }, this), 1000);
-            }, this), 15000);
+            }, this), 10000 + Math.random() * 10000);
         }
     });
 
