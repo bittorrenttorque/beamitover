@@ -471,7 +471,7 @@ jQuery(function() {
             }
 
             var sorted = this.$el.parent().children('.user.well.friend').sort(function(a, b) {
-                return rankUserElementsByStatus(a) - rankUserElementsByStatus(b);
+                return rankUserElementsByStatus(b) - rankUserElementsByStatus(a);
             });
             this.$el.parent().append(sorted);
         },
