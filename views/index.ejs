@@ -134,14 +134,12 @@
       </script>
 
       <script type="text/template" id="friend_template">
-        <div class="user well friend">
-          <div class="profile row">
-            <img src="https://graph.facebook.com/<@= id @>/picture?type=square" alt="<@= name @>" />
-            <div class="name"><@= name @></div>
-            <i class="status <@= status @>"></i>
-          </div>
-          <div class="bundles"></div>
+        <div class="profile row <@= status @>">
+          <img src="https://graph.facebook.com/<@= id @>/picture?type=square" alt="<@= name @>" />
+          <div class="name"><@= name @></div>
+          <i class="status"></i>
         </div>
+        <div class="bundles"></div>
       </script>
 
       <script type="text/template" id="bundling_template">

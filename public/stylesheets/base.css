@@ -10,6 +10,10 @@ html {
     border: 1px solid rgba(0, 0, 0, 0.25) !important;
 }
 
+.hero-unit {
+    padding: 19px 60px;
+}
+
 .fb-progress {
     height: 3px;
     background-color: white;
@@ -44,9 +48,11 @@ html {
     background-color: #fff;
 }
 
-i.status {
+.profile.connecting > div.name, .profile.offline > div.name, .profile.error > div.name {
+    color: #ccc;
 }
-i.status.online {
+
+.profile.online > i.status {
     background-image: url(/images/QlrR_y6HLs5.png);
     background-position: -845px -9px;
     background-repeat: no-repeat;
@@ -57,7 +63,7 @@ i.status.online {
     height: 27px;
     float: left;
 }
-i.status.connecting {
+.connecting > i.status {
     background-image: url(/images/GsNJNwuI-UM.gif);
     width: 16px;
     height: 11px;
@@ -65,7 +71,8 @@ i.status.connecting {
     margin-top: 9px;
     margin-left: 7px;
 }
-i.status.offline {
+/*
+.offline > i.status {
     background-image: url(/images/42NpRHYIj_U.png);
     background-repeat: no-repeat;
     background-size: auto;
@@ -76,7 +83,8 @@ i.status.offline {
     margin-top: 10px;
     margin-left: 7px;
 }
-i.status.error {
+*/
+.error > i.status {
     background-image: url(/images/QlrR_y6HLs5.png);
     background-position: -809px -55px;
     background-repeat: no-repeat;
@@ -87,7 +95,6 @@ i.status.error {
     height: 11px;
     float: left;
 }
-
 .file > .name {
     float: left;
 }

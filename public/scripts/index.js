@@ -443,6 +443,7 @@ jQuery(function() {
     })
 
     var FriendView = Backbone.View.extend({
+        className: 'user well friend',
         initialize: function() {
             this.template = _.template($(this.options.templateid).html());
             this.bundles = new FriendBundleListView({
@@ -452,7 +453,25 @@ jQuery(function() {
             this.model.on('change:status', this.onStatus, this);
         },
         onStatus: function(status) {
-            this.$('.status').removeClass('connecting online offline error').addClass(this.model.get('status'));
+            this.$('.profile').removeClass('connecting online offline error').addClass(this.model.get('status'));
+
+            var rankUserElementsByStatus = function(user) {
+                if(user.child('.profile').hasClass('online')) {
+                    return 3;
+                } else if(user.child('profile').hasClass('connecting')) {
+                    return 2;
+                } else if(user.child('profile').hasClass('offline')) {
+                    return 1;
+                } else if(user.child('profile').hasClass('error')) {
+                    return 0;
+                } else {
+                    throw 'invalid status';
+                }
+            }
+
+            this.$el.parent().children('.user.well.friend').sort(function(a, b) {
+                return rankUserElementsByStatus(a) - rankUserElementsByStatus(b);
+            });
         },
         assign : function (view, selector) {
             view.setElement(this.$(selector)).render();
