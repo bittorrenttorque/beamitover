@@ -459,11 +459,11 @@ jQuery(function() {
                 var user = $(elem);
                 if(user.children('.profile').hasClass('online')) {
                     return 3;
-                } else if(user.children('profile').hasClass('connecting')) {
+                } else if(user.children('.profile').hasClass('connecting')) {
                     return 2;
-                } else if(user.children('profile').hasClass('offline')) {
+                } else if(user.children('.profile').hasClass('offline')) {
                     return 1;
-                } else if(user.children('profile').hasClass('error')) {
+                } else if(user.children('.profile').hasClass('error')) {
                     return 0;
                 } else {
                     throw 'invalid status';
