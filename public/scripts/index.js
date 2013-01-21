@@ -455,14 +455,15 @@ jQuery(function() {
         onStatus: function(status) {
             this.$('.profile').removeClass('connecting online offline error').addClass(this.model.get('status'));
 
-            var rankUserElementsByStatus = function(user) {
-                if(user.child('.profile').hasClass('online')) {
+            var rankUserElementsByStatus = function(elem) {
+                var user = $(elem);
+                if(user.children('.profile').hasClass('online')) {
                     return 3;
-                } else if(user.child('profile').hasClass('connecting')) {
+                } else if(user.children('profile').hasClass('connecting')) {
                     return 2;
-                } else if(user.child('profile').hasClass('offline')) {
+                } else if(user.children('profile').hasClass('offline')) {
                     return 1;
-                } else if(user.child('profile').hasClass('error')) {
+                } else if(user.children('profile').hasClass('error')) {
                     return 0;
                 } else {
                     throw 'invalid status';
